@@ -7,14 +7,14 @@ public class CityWeather {
 
 	private String cityName;
 	private String date;
-	private int minTemperature;
-	private int maxTemperature;
+	private double minTemperature;
+	private double maxTemperature;
 	private String unit = "F";
 	
 	private String dayCondition; //e.g. Mostly sunny, Clear, etc.
 	private String nightCondition;
 	
-	public CityWeather(String cityName, String date, int minTemperature, int maxTemperature, String dayCondition,
+	public CityWeather(String cityName, String date, double minTemperature, double maxTemperature, String dayCondition,
 			String nightCondition) {
 		this.cityName = cityName;
 		this.date = date;
@@ -31,10 +31,10 @@ public class CityWeather {
 	public String getDate() {
 		return date;
 	}
-	public int getMinTemperature() {
+	public double getMinTemperature() {
 		return minTemperature;
 	}
-	public int getMaxTemperature() {
+	public double getMaxTemperature() {
 		return maxTemperature;
 	}
 	public String getUnit() {

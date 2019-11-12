@@ -89,8 +89,8 @@ public class WeatherCollection {
 		JSONObject temperatures = daily.getJSONObject("Temperature");
 		double minTemperature = Double.parseDouble(temperatures.getJSONObject("Minimum").getString("Value"));
 		double maxTemperature = Double.parseDouble(temperatures.getJSONObject("Maximum").getString("Value"));
-		String dayCondition =  daily.getJSONObject("Day").getString("IconPhrase");
-		String nightCondition =  daily.getJSONObject("Night").getString("IconPhrase");
+		String dayCondition = daily.getJSONObject("Day").getString("IconPhrase");
+		String nightCondition = daily.getJSONObject("Night").getString("IconPhrase");
 		return new CityWeather(city.getName(), date, minTemperature, maxTemperature, dayCondition, nightCondition);
 	}
 	

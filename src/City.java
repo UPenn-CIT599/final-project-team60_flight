@@ -7,11 +7,13 @@ public class City {
 	private int rank; // city's popularity ranking (1 = most popular)
 	private String name; // city's name
 	private String country; // country of the city
+	private String countryCode;
 	
-	public City(int rank, String name, String country) {
+	public City(int rank, String name, String country, String countryCode) {
 		this.rank = rank;
 		this.name = name;
 		this.country = country;
+		this.countryCode = countryCode;
 	}
 
 	/**
@@ -36,6 +38,10 @@ public class City {
 	 */
 	public String getCountry() {
 		return country;
+	}
+	
+	public String getCountryCode() {
+		return countryCode;
 	}
 	
 	/**

@@ -26,5 +26,5 @@ class CityReaderTest {
 		assertEquals(1, hk.getRank());
 		assertEquals("Hong Kong", hk.getName());
 	}
-
+	
 }

@@ -1,37 +1,34 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+
+import org.json.JSONException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class WeatherCollectionTest {
+	
+	WeatherCollection wc;
 
-	@Test
-	void testWeatherCollection() {
-		fail("Not yet implemented");
+	@BeforeEach
+	void setUp() throws Exception {
+		City tp = new City(15, "Taipei", "Taiwan", "TW");
+		wc = new WeatherCollection(tp, 1);
+	}
+
+	@AfterEach
+	void tearDown() throws Exception {
 	}
 
 	@Test
-	void testReadCityURL() {
-		fail("Not yet implemented");
+	public void testWeatherCollectionNotNull() {
+		assertNotNull(wc, "WeatherCollection cannot be null");
 	}
 
 	@Test
-	void testGetCityKey() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testReadForecastURL() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testWeatherParser() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetWeatherList() {
-		fail("Not yet implemented");
+	void testGetCityKey() throws JSONException, IOException {
+		assertEquals("4-315078_1_AL", wc.getCityKey());
 	}
 
 }

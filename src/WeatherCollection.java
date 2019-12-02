@@ -31,7 +31,7 @@ public class WeatherCollection {
 	 */
 	public JSONArray readCityURL() throws IOException, JSONException {
 		String url = "http://dataservice.accuweather.com/locations/v1/cities/";
-		String cityURL = url + city.getCountryCode() + "/search?apikey=...&q=" + city.getName();
+		String cityURL = url + city.getCountryCode() + "/search?apikey=ywatq7GdyGuuvoG8JHZ86DJUVeqKIQpa&q=" + city.getName();
 		InputStream is = new URL(cityURL).openStream();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8"))); //response
@@ -65,7 +65,7 @@ public class WeatherCollection {
 	 */
 	public JSONObject readForecastURL() throws JSONException, IOException {
 		String url = "http://dataservice.accuweather.com/forecasts/v1/daily/";
-		String forecastURL = url + count + "day/" + getCityKey() + "?apikey=...";
+		String forecastURL = url + count + "day/" + getCityKey() + "?apikey=ywatq7GdyGuuvoG8JHZ86DJUVeqKIQpa";
 		InputStream is = new URL(forecastURL).openStream();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8"))); //response
@@ -87,8 +87,8 @@ public class WeatherCollection {
 	public CityWeather weatherParser(JSONObject daily) {
 		String date = daily.getString("Date").substring(0, 10);
 		JSONObject temperatures = daily.getJSONObject("Temperature");
-		double minTemperature = Double.parseDouble(temperatures.getJSONObject("Minimum").getString("Value"));
-		double maxTemperature = Double.parseDouble(temperatures.getJSONObject("Maximum").getString("Value"));
+		double minTemperature = temperatures.getJSONObject("Minimum").getDouble("Value");
+		double maxTemperature = temperatures.getJSONObject("Maximum").getDouble("Value");
 		String dayCondition = daily.getJSONObject("Day").getString("IconPhrase");
 		String nightCondition = daily.getJSONObject("Night").getString("IconPhrase");
 		return new CityWeather(city.getName(), date, minTemperature, maxTemperature, dayCondition, nightCondition);
@@ -106,4 +106,24 @@ public class WeatherCollection {
 		return forecasts;
 	}
 
+	
+	public static void main(String[] args) throws JSONException, IOException {
+		City c = new City(15, "Taipei", "Taiwan", "TW");
+		WeatherCollection wc = new WeatherCollection(c, 1);
+//		JSONArray ja = wc.readCityURL();
+		System.out.println(wc.getCityKey());
+		System.out.println("Useful info:");
+		ArrayList<CityWeather> ar = wc.getWeatherList();
+		for (int i = 0; i < ar.size(); i++) {
+			System.out.println(ar.get(i).getCityName());
+			System.out.println(ar.get(i).getDate());
+			System.out.println(ar.get(i).getDayCondition());
+			System.out.println(ar.get(i).getMaxTemperature());
+			System.out.println(ar.get(i).getMinTemperature());
+			System.out.println(ar.get(i).getNightCondition());
+			System.out.println(ar.get(i).getUnit());
+		}
+	}
+
 }
+

@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -10,6 +11,8 @@ import java.util.Scanner;
 public class CityReader {
 	
 	ArrayList<City> cities = new ArrayList<>();
+	HashMap<String, String> cityToCountry = new HashMap<String, String>();
+	HashMap<String, String> cityToCountryCode = new HashMap<String, String>();
 	
 	public CityReader() {
 		try {
@@ -34,35 +37,23 @@ public class CityReader {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	/**
-	 * 
-	 * @return a list of City objects
-	 */
-	public ArrayList<City> getAllCities() {
-		return cities;
-	}
-	
-	/**
-	 * take an ArrayList and returns a String which
-	 * displays top 10 popular cities to travel to
-	 * @param list - ArrayList that stores city objects
-	 * @return numbered list of elements
-	 */
-	public String prettyPrint(ArrayList<City> list) {
-		String display = "";
+		mapCity();
 		
-		for (int i = 0; i < 10; i++) {
-			display += i+1 + "." + " " + list.get(i).getName() + "\n";
+	}
+	
+	/**
+	 * This method creates a HashMap that maps city to its country
+	 * and city to its country code
+	 */
+	private void mapCity() {
+		for (City c : cities) {
+			cityToCountry.put(c.getName(), c.getCountry());
+			cityToCountryCode.put(c.getName(), c.getCountryCode());
 		}
-		
-		return display;
 	}
 	
 	public static void main(String[] args) {
 		CityReader cr = new CityReader();
 		System.out.println(cr.cities.toString());
-		System.out.println(cr.prettyPrint(cr.getAllCities()));
 	}
 }

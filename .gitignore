@@ -1,5 +1,5 @@
 bin/*.class
-target/*.class
+target/classes/*.class
 .DS_Store
 .classpath
 .project

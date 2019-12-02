@@ -1,5 +1,4 @@
-bin/*.class
-target/classes/*.class
+*.class
 .DS_Store
 .classpath
 .project

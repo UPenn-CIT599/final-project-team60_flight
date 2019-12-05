@@ -1,0 +1,7 @@
+“Spur-of-the-moment Trip” is a handy tool that provides pieces of information for users willing to have a short trip. The user chooses one of the popular cities for travelers and specifies the dates he for a round trip. The program then provides two kinds of information with details: a 5-day weather forecast of the destination city and the most inexpensive flights available. The user can also search for other desired cities if needed.
+
+Siva Ho is responsible for implementing the cheapest flights API and the GUI interface.
+
+Xueying Li is responsible for implementing the weather forecast API, unit tests and exception handling.
+
+Link to GitHub repository: https://github.com/UPenn-CIT599/final-project-team60_flight

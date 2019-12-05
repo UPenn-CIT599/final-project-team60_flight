@@ -33,6 +33,7 @@ public class CityReader {
 				cities.add(city);
 				
 			}
+			in.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -41,6 +42,18 @@ public class CityReader {
 		
 	}
 	
+	public ArrayList<City> getCities() {
+		return cities;
+	}
+	
+	public HashMap<String, String> getCityToCountry() {
+		return cityToCountry;
+	}
+
+	public HashMap<String, String> getCityToCountryCode() {
+		return cityToCountryCode;
+	}
+
 	/**
 	 * This method creates a HashMap that maps city to its country
 	 * and city to its country code

@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +30,8 @@ public class WeatherCollection {
 	 */
 	public JSONArray readCityURL() throws IOException, JSONException {
 		String url = "http://dataservice.accuweather.com/locations/v1/cities/";
-		String cityURL = url + city.getCountryCode() + "/search?apikey=ywatq7GdyGuuvoG8JHZ86DJUVeqKIQpa&q=" + city.getName();
+		String apiKey = "...";
+		String cityURL = url + city.getCountryCode() + "/search?apikey=" + apiKey +"&q=" + city.getName();
 		InputStream is = new URL(cityURL).openStream();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8"))); //response
@@ -65,7 +65,8 @@ public class WeatherCollection {
 	 */
 	public JSONObject readForecastURL() throws JSONException, IOException {
 		String url = "http://dataservice.accuweather.com/forecasts/v1/daily/";
-		String forecastURL = url + count + "day/" + getCityKey() + "?apikey=ywatq7GdyGuuvoG8JHZ86DJUVeqKIQpa";
+		String apiKey = "...";
+		String forecastURL = url + count + "day/" + getCityKey() + "?apikey=" + apiKey;
 		InputStream is = new URL(forecastURL).openStream();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8"))); //response
@@ -104,25 +105,6 @@ public class WeatherCollection {
 			forecasts.add(weatherParser(daily));
 		}
 		return forecasts;
-	}
-
-	
-	public static void main(String[] args) throws JSONException, IOException {
-		City c = new City(15, "Taipei", "Taiwan", "TW");
-		WeatherCollection wc = new WeatherCollection(c, 1);
-//		JSONArray ja = wc.readCityURL();
-		System.out.println(wc.getCityKey());
-		System.out.println("Useful info:");
-		ArrayList<CityWeather> ar = wc.getWeatherList();
-		for (int i = 0; i < ar.size(); i++) {
-			System.out.println(ar.get(i).getCityName());
-			System.out.println(ar.get(i).getDate());
-			System.out.println(ar.get(i).getDayCondition());
-			System.out.println(ar.get(i).getMaxTemperature());
-			System.out.println(ar.get(i).getMinTemperature());
-			System.out.println(ar.get(i).getNightCondition());
-			System.out.println(ar.get(i).getUnit());
-		}
 	}
 
 }

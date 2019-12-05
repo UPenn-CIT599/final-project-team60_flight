@@ -26,7 +26,7 @@ public class CityReader {
 				int rank = Integer.parseInt(columnData[0]);
 				String name = columnData[1];
 				String country = columnData[2];
-				String countryCode = columnData[2];
+				String countryCode = columnData[3];
 				
 				City city = new City(rank, name, country, countryCode);
 				
@@ -52,8 +52,4 @@ public class CityReader {
 		}
 	}
 	
-	public static void main(String[] args) {
-		CityReader cr = new CityReader();
-		System.out.println(cr.cities.toString());
-	}
 }

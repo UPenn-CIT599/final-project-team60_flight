@@ -1,8 +1,6 @@
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -10,12 +8,10 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Scanner;
-
 import javax.swing.*;
-
 import com.mashape.unirest.http.exceptions.UnirestException;
+
 /**
  * This class is the Destination tab that asks the user
  * enter a destination and departure and returning dates
@@ -53,6 +49,10 @@ public class DestinationTab {
 	private static String bookText = "Book your flight here";
 	private static JLabel hyperlink = new JLabel();
 	private static JLabel error = new JLabel();
+	static JLabel line = new JLabel();
+	static JLabel line2 = new JLabel();
+	static JLabel line3 = new JLabel();
+	static JLabel line4 = new JLabel();
 	
 	/**
 	 * This method constructs the destination panel that allows
@@ -109,27 +109,28 @@ public class DestinationTab {
 		returningDateText = new JTextField(10);
 		panel.add(returningDateText);
 		
-		JLabel space3 = new JLabel("                                                                ");
+		JLabel space3 = new JLabel("                               ");
 		panel.add(space3);
 		
 		JButton enterButton = new JButton("Enter");
 		panel.add(enterButton);
 		
-		JLabel space2 = new JLabel("                                                             ");
-		panel.add(space2);
-		
+		panel.add(line4);
 		panel.add(error);
 		panel.add(priceInfo);
+		panel.add(line);
 		
 		panel.add(outText);
 		panel.add(outboundDepInfo);
 		panel.add(outboundArrInfo);
 		panel.add(outboundStopInfo);
+		panel.add(line2);
 		
 		panel.add(inText);
 		panel.add(inboundDepInfo);
 		panel.add(inboundArrInfo);
 		panel.add(inboundStopInfo);
+		panel.add(line3);
 		
 		panel.add(hyperlink);
 		
@@ -137,6 +138,16 @@ public class DestinationTab {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				error.setText("");
+				priceInfo.setText("");
+				outText.setText("");
+				outboundDepInfo.setText("");
+				outboundArrInfo.setText("");
+				outboundStopInfo.setText("");
+				inText.setText("");
+				inboundDepInfo.setText("");
+				inboundArrInfo.setText("");
+				inboundStopInfo.setText("");
 				
 				userDestination = destinationText.getText();
 				DestinationCountry = parseCountry(destCountryText.getText());
@@ -151,7 +162,7 @@ public class DestinationTab {
 					flight.getLegIDsPriceAndBookingURL();
 					flight.makeFlights();
 					
-					String price = "               Price: " + flight.price + " USD";
+					String price = "             Price: " + flight.price + " USD";
 					final String bookURL = flight.bookingURL;
 					
 					String outLabel = "Outbound flight:";
@@ -197,20 +208,19 @@ public class DestinationTab {
 					outboundDepInfo.setText(outDepart);
 					outboundArrInfo.setText(outArr);
 					outboundStopInfo.setText(outStops);
-					
 					inText.setText(inLabel);
+					line.setText("-------------------------------------------------------------------------------------------------------------------------------------------------------");
+					line2.setText("-------------------------------------------------------------------------------------------------------------------------------------------------------");
+					line3.setText("-------------------------------------------------------------------------------------------------------------------------------------------------------");
+					line4.setText("-------------------------------------------------------------------------------------------------------------------------------------------------------");
 					inboundDepInfo.setText(inDepart);
 					inboundArrInfo.setText(inArr);
 					inboundStopInfo.setText(inStops);
 					
 					
-				} catch (UnirestException | NullPointerException e1) {
+				} catch (UnirestException | NullPointerException | IndexOutOfBoundsException e1) {
 					String errorMsg = "API request error. Try again                                                                                          ";
 					error.setText(errorMsg);
-					return;
-				} catch(IndexOutOfBoundsException e2) {
-					String errorMsg2 = "Invalid inputs.                                                                                          ";
-					error.setText(errorMsg2);
 					return;
 				}
 				
@@ -240,8 +250,4 @@ public class DestinationTab {
 		return converted;
 	}
 	
-	public static void main(String[] args) {
-		DestinationTab d = new DestinationTab();
-		
-	}
 }

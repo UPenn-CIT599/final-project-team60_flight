@@ -1,6 +1,6 @@
 import java.awt.FlowLayout;
-
 import javax.swing.*;
+
 /**
  * This class runs the whole program by combining
  * all the tabs and sets up JFrame
@@ -18,18 +18,19 @@ public class ProgramRunner extends JFrame {
 		PopularCitiesTab.createPopularCitiesTab((panel1));
 		panel1.setOpaque(false);
 		
-		JPanel panel2 = new JPanel();
-		DestinationTab.createDestinationTab(panel2);
-		panel2.setOpaque(false);
-		
 		JPanel panel3 = new JPanel();
-		WeatherInfoTab.createWeatherTab(panel3);
+		DestinationTab.createDestinationTab(panel3);
 		panel3.setOpaque(false);
+		
+		JPanel panel2 = new JPanel();
+		WeatherInfoTab.createWeatherTab(panel2);
+		panel2.setOpaque(false);
 		
 		JTabbedPane tab = new JTabbedPane();
 		tab.add("Pick a popular cities", panel1);
-		tab.add("or choose your own destination", panel2);
-		tab.add("Weather Info", panel3);
+		tab.add("Weather Info", panel2);
+		tab.add("or choose your own destination", panel3);
+		
 		
 		frame.setSize(660,600);
 		frame.setLayout(new FlowLayout());

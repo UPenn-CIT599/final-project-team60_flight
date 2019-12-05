@@ -1,20 +1,6 @@
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,9 +9,6 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.GetRequest;
-import com.mashape.unirest.request.HttpRequest;
-import com.mashape.unirest.request.body.Body;
 
 /**
  * This class calls Skyscanner API to get itinaries
@@ -63,7 +46,7 @@ public class FlightAPICaller {
 		
 		String sessionKey = getSessionKey();
 		// User needs to put their api key here
-		String x_rapidapi_key = "e5f8c820f8mshde143b441ddec46p1a1443jsn70962fb6abcb";
+		String x_rapidapi_key = "";
 		
 		HttpResponse<JsonNode> response = Unirest.get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/"
 				+ sessionKey + "?sortType=price&sortOrder=asc&pageIndex=0&pageSize=10")
@@ -85,7 +68,7 @@ public class FlightAPICaller {
 	public HashMap<String, String> getCountryCodeMap() throws UnirestException {
 		
 		HashMap<String, String> codeToCountry = new HashMap<String, String>();
-		String x_rapidapi_key = "e5f8c820f8mshde143b441ddec46p1a1443jsn70962fb6abcb";
+		String x_rapidapi_key = "";
 		
 		HttpResponse<JsonNode> response = Unirest.get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/countries/en-US")
 				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
@@ -173,7 +156,7 @@ public class FlightAPICaller {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} 
-		String x_rapidapi_key = "e5f8c820f8mshde143b441ddec46p1a1443jsn70962fb6abcb";
+		String x_rapidapi_key = "";
 		
 		HttpResponse<JsonNode> response = Unirest.get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/" 
 		+ countryCode + "/USD/en-US/?query=" + query)
@@ -265,7 +248,7 @@ public class FlightAPICaller {
 		List<String> sessionKeyList;
 		String[] sessionKeyArr;
 		String sessionKey;
-		String x_rapidapi_key = "e5f8c820f8mshde143b441ddec46p1a1443jsn70962fb6abcb";
+		String x_rapidapi_key = "";
 		
 		// Host url
 		String host = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0";
@@ -295,22 +278,5 @@ public class FlightAPICaller {
 	}
 	
 
-	
-	public static void main(String[] args) throws Exception {
-		
-		FlightAPICaller flight = new FlightAPICaller("tokyo", "Japan", "Hong Kong", "Hong Kong", "2020-01-01", "2020-01-10");
-
-		flight.callFlightAPI();
-		flight.getLegIDsPriceAndBookingURL();
-		flight.makeFlights();
-		
-		System.out.println("outboundleg: " + flight.outboundLegID);
-		System.out.println("inboundleg: " + flight.inboundLegID);
-		System.out.println("outbound flight: " + flight.outboundFlight);
-		System.out.println("inbound flight: " + flight.inboundFlight);
-		System.out.println("price: " + flight.price);
-		System.out.println("link: " + flight.bookingURL);
-		
-	}
 }
 

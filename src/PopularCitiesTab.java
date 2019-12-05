@@ -1,8 +1,6 @@
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -11,10 +9,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Scanner;
-
 import javax.swing.*;
-
 import com.mashape.unirest.http.exceptions.UnirestException;
+
 /**
  * This class is a panel that displays
  * the top 10 most popular cities and the user is allowed
@@ -53,6 +50,10 @@ public class PopularCitiesTab {
 	static private String bookText = "Book your flight here";
 	static private JLabel hyperlink = new JLabel();
 	static private JLabel error = new JLabel();
+	static JLabel line = new JLabel();
+	static JLabel line2 = new JLabel();
+	static JLabel line3 = new JLabel();
+	static JLabel line4 = new JLabel();
 
 	/**
 	 * This method constructs a panel that displays top 10
@@ -142,27 +143,29 @@ public class PopularCitiesTab {
 		returningDateText = new JTextField(10);
 		panel.add(returningDateText);
 		
-		JLabel space4 = new JLabel("                                                             ");
+		JLabel space4 = new JLabel("                         ");
 		panel.add(space4);
 
 		JButton enterButton = new JButton("Enter");
 		panel.add(enterButton);
 		
-		JLabel space2 = new JLabel("                                                             ");
-		panel.add(space2);
+		panel.add(line4);
 
 		panel.add(error);
 		panel.add(priceInfo);
+		panel.add(line);
 
 		panel.add(outText);
 		panel.add(outboundDepInfo);
 		panel.add(outboundArrInfo);
 		panel.add(outboundStopInfo);
+		panel.add(line2);
 
 		panel.add(inText);
 		panel.add(inboundDepInfo);
 		panel.add(inboundArrInfo);
 		panel.add(inboundStopInfo);
+		panel.add(line3);
 
 		panel.add(hyperlink);
 
@@ -170,7 +173,18 @@ public class PopularCitiesTab {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				error.setText("");
+				priceInfo.setText("");
+				outText.setText("");
+				outboundDepInfo.setText("");
+				outboundArrInfo.setText("");
+				outboundStopInfo.setText("");
+				inText.setText("");
+				inboundDepInfo.setText("");
+				inboundArrInfo.setText("");
+				inboundStopInfo.setText("");
+				hyperlink.setText("");
+				
 				String destCity = "";
 				String destCountry = "";
 				String userCity = currentCityText.getText();
@@ -225,7 +239,7 @@ public class PopularCitiesTab {
 					flight.getLegIDsPriceAndBookingURL();
 					flight.makeFlights();
 
-					String price = "               Price: " + flight.price + " USD";
+					String price = "             Price: " + flight.price + " USD";
 					final String bookURL = flight.bookingURL;
 
 					String outLabel = "Outbound flight:";
@@ -271,20 +285,21 @@ public class PopularCitiesTab {
 					outboundDepInfo.setText(outDepart);
 					outboundArrInfo.setText(outArr);
 					outboundStopInfo.setText(outStops);
-
+					
+					line.setText("-------------------------------------------------------------------------------------------------------------------------------------------------------");
+					line2.setText("-------------------------------------------------------------------------------------------------------------------------------------------------------");
+					line3.setText("-------------------------------------------------------------------------------------------------------------------------------------------------------");
+					line4.setText("-------------------------------------------------------------------------------------------------------------------------------------------------------");
 					inText.setText(inLabel);
 					inboundDepInfo.setText(inDepart);
 					inboundArrInfo.setText(inArr);
 					inboundStopInfo.setText(inStops);
 
 
-				} catch (UnirestException | NullPointerException e1) {
+				} catch (UnirestException | NullPointerException | IndexOutOfBoundsException e1) {
 					String errorMsg = "API request error. Try again                                                                                          ";
 					error.setText(errorMsg);
 					return;
-				} catch(IndexOutOfBoundsException e2) {
-					String errorMsg2 = "Invalid inputs.                                                                                          ";
-					error.setText(errorMsg2);
 				}
 			}
 

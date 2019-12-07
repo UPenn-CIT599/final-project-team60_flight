@@ -1,13 +1,9 @@
 # final-project-team60_flight
 final-project-team60_flight created by GitHub Classroom
 
-The program allows the user to search flights to one of the top 10 popular destinations and check their weather conditions. If the user is not interested in any of the suggested cities, they also have the option to put their desired destination.
+The program allows the user to search flights to one of the top 10 popular destinations and check their weather conditions. If the user is not interested in any of the suggested cities, they also have the option to put their desired destination. 
 
-First, since this program uses two APIs (Skyscanner and AccuWeather), the user will need to register an account on RapidAPI (https://rapidapi.com/skyscanner/api/skyscanner-flight-search) and AccuWeatherAPI (https://developer.accuweather.com/?gclid=Cj0KCQiAz53vBRCpARIsAPPsz8WRKG6B6FT0thoN_QTieFyb9hSvsAIetcOHdK9dqp6rpbhCFswpNpYaAkQ8EALw_wcB) to get their own API keys.
-
-After the user gets the API keys, they will then open FlightAPICaller.java and put the Skyscanner RapidAPI key in the four "x_rapidapi_key" variables that are located in four methods: callFlightAPI(), getCountryCodeMap(), getCityCode(), and getSessionKey(). Then, the user will need to open WeatherCollection.java and put their AccuWeather API key in two "apiKey" variables that are located in two methods: readCityURL() and readForecastURL().
-
-After above the steps, the user can then open ProgramRunner.java and hit "run" in Eclipse. A Java program will then be populated.
+API keys were erased from source code files. Users are welcome to try the program with Runnable.jar.
 
 In the Java program, there are three tabs. The first tab provides a list of popular cities. The user can choose one of the listed popular cities and enters their current city, current country, departure and returning dates. After hitting "Enter", the program will then populate the cheapest flight's price, the number of lay-overs, a link to book the flight, and the departure and arrival times of both outbound and inbound flights.
 

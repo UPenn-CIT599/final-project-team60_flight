@@ -296,7 +296,7 @@ public class PopularCitiesTab {
 					inboundStopInfo.setText(inStops);
 
 
-				} catch (UnirestException | NullPointerException | IndexOutOfBoundsException e1) {
+				} catch (UnirestException | NullPointerException | IndexOutOfBoundsException | IOException e1) {
 					String errorMsg = "API request error. Try again                                                                                          ";
 					error.setText(errorMsg);
 					return;

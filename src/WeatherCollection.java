@@ -1,9 +1,4 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +13,6 @@ import org.json.JSONObject;
 public class WeatherCollection {
 	private City city;
 	private int count; //number of days: 1, 5, 10, or 15.
-
 	private NetworkCaller networkCaller;
 
 	public WeatherCollection(City city, int count, NetworkCaller networkCaller) {
@@ -38,21 +32,8 @@ public class WeatherCollection {
 		String url = "http://dataservice.accuweather.com/locations/v1/cities/";
 		String apiKey = "";
 		String cityURL = url + city.getCountryCode() + "/search?apikey=" + apiKey +"&q=" + city.getName();
-
-		//		InputStream is = new URL(cityURL).openStream();
-		//		BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8"))); //response
-		//		StringBuilder sb = new StringBuilder();
-		//		int next = br.read();
-		//		while (next != -1) {
-		//			sb.append((char)next);
-		//			next = br.read();
-		//		}			
-		//		String jsonText = sb.toString();
-
-		String jsonText = networkCaller.Call(cityURL, null);
-		System.out.println(jsonText);
+		String jsonText = networkCaller.Call(cityURL);
 		JSONArray jsonArray = new JSONArray(jsonText);
-		//		is.close();
 		return jsonArray;
 	}
 
@@ -63,7 +44,6 @@ public class WeatherCollection {
 		JSONArray jsonArray = readCityURL();
 		JSONObject json = jsonArray.getJSONObject(0);
 		return json.getString("Key");
-		//		return json.getJSONObject("Region").getString("ID");
 	}
 
 	/**
@@ -72,22 +52,10 @@ public class WeatherCollection {
 	public JSONObject readForecastURL() throws JSONException, IOException {
 		String url = "http://dataservice.accuweather.com/forecasts/v1/daily/";
 		String apiKey = "";
-		String forecastURL = url + count + "day/" + getCityKey() + "?apikey=" + apiKey;
-
-		//		InputStream is = new URL(forecastURL).openStream();
-		//		BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8"))); //response
-		//		StringBuilder sb = new StringBuilder();
-		//		int next = br.read();
-		//		while (next != -1) {
-		//			sb.append((char)next);
-		//			next = br.read();
-		//		}			
-
-		String jsonText = networkCaller.Call(forecastURL, null);
-		System.out.println(jsonText);
+		String forecastHead = url + count + "day/";
+		String forecastTail = "?apikey=" + apiKey;
+		String jsonText = networkCaller.Call(forecastHead, getCityKey(), forecastTail);
 		JSONObject json = new JSONObject(jsonText);
-
-		//		is.close();
 		return json;
 	}
 
@@ -104,7 +72,6 @@ public class WeatherCollection {
 	public ArrayList<CityWeather> getWeatherList() throws JSONException, IOException {
 		JSONObject json = readForecastURL();
 		JSONArray jsonArray = json.getJSONArray("DailyForecasts");
-		//		ArrayList<JSONObject> dailyForecasts = new ArrayList<>();
 		ArrayList<CityWeather> forecasts = new ArrayList<>();
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject daily = jsonArray.getJSONObject(i);

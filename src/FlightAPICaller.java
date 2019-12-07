@@ -1,3 +1,5 @@
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
@@ -28,53 +30,66 @@ public class FlightAPICaller {
 	public OutBoundFlight outboundFlight;
 	public InBoundFlight inboundFlight;
 	private JsonObject apiBody;
+	private NetworkCaller networkCaller;
 	
 	public FlightAPICaller(String originPlace, String originCountry, String destPlace, String destCountry, String outboundDate, String inboundDate) 
-			throws UnirestException, NullPointerException {
-		
+			throws UnirestException, NullPointerException, IOException {
+
 		this.originPlace = getCityCode(originPlace, originCountry);
 		this.destination = getCityCode(destPlace, destCountry);
 		this.outboundDate = outboundDate;
 		this.inboundDate = inboundDate;
+		this.networkCaller = new NetworkCaller();
+	}
+	
+	public FlightAPICaller(String originPlace, String originCountry, String destPlace, String destCountry, String outboundDate, String inboundDate, NetworkCaller networkCaller) 
+			throws UnirestException, NullPointerException, IOException {
+		
+		this.originPlace = originPlace;
+		this.destination = originCountry;
+		this.outboundDate = outboundDate;
+		this.inboundDate = inboundDate;
+		this.networkCaller = networkCaller;
 	}
 	
 	/**
 	 * This method calls Skyscanner API and stores the result of api request in apiBody instance variable
 	 * @throws UnirestException, NullPointerException 
+	 * @throws IOException 
 	 */
-	public void callFlightAPI() throws UnirestException, NullPointerException {
+	public void callFlightAPI() throws UnirestException, NullPointerException, IOException {
 		
 		String sessionKey = getSessionKey();
 		// User needs to put their api key here
 		String x_rapidapi_key = "";
+
+		String getURL = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/"
+				+ sessionKey + "?sortType=price&sortOrder=asc&pageIndex=0&pageSize=10";
+		HashMap<String, String> headers = new HashMap<>();
+		headers.put("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com");
+		headers.put("x-rapidapi-key", x_rapidapi_key);
 		
-		HttpResponse<JsonNode> response = Unirest.get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/"
-				+ sessionKey + "?sortType=price&sortOrder=asc&pageIndex=0&pageSize=10")
-				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
-				.header("x-rapidapi-key", x_rapidapi_key)
-				.asJson();
-		
+		String response = networkCaller.Call(getURL, headers);
 		JsonParser jp = new JsonParser();
-		JsonElement je = jp.parse(response.getBody().toString());
+		JsonElement je = jp.parse(response);
+
 		apiBody = je.getAsJsonObject();
-		
 	}
 	
 	/**
 	 * This method calls Skyscanner API to get country codes
 	 * @return HashMap that maps countries to country codes
 	 * @throws UnirestException
+	 * @throws IOException 
 	 */
-	public HashMap<String, String> getCountryCodeMap() throws UnirestException {
+	public HashMap<String, String> getCountryCodeMap() throws UnirestException, IOException {
 		
 		HashMap<String, String> codeToCountry = new HashMap<String, String>();
 		String x_rapidapi_key = "";
-		
 		HttpResponse<JsonNode> response = Unirest.get("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/countries/en-US")
 				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
 				.header("x-rapidapi-key", x_rapidapi_key)
 				.asJson();
-		
 		JsonParser jp = new JsonParser();
 		JsonElement je = jp.parse(response.getBody().toString());
 		JsonObject obj = je.getAsJsonObject();
@@ -87,8 +102,8 @@ public class FlightAPICaller {
 			String name = countryObj.get("Name").toString().substring(1, countryObj.get("Name").toString().length() - 1);
 			codeToCountry.put(name, code);
 		}
-		
 		return codeToCountry;
+		
 	}
 	
 	/**
@@ -97,15 +112,18 @@ public class FlightAPICaller {
 	 * @return country code
 	 * @throws UnirestException
 	 * @throws NullPointerException
+	 * @throws IOException 
 	 */
-	public String getCountryCode(String country) throws UnirestException, NullPointerException {
+	public String getCountryCode(String country) throws UnirestException, NullPointerException, IOException {
 		
-		String code = "";
-		HashMap<String, String> codeToCountry = getCountryCodeMap();
-		
-		code = codeToCountry.get(country);
-		
-		return code;
+		JsonParser parser = new JsonParser();
+		JsonArray countries = parser.parse(new FileReader("CountryCode.json")).getAsJsonObject().get("Countries").getAsJsonArray();
+		HashMap<String, String> countryToCode = new HashMap<>();
+		for (int i = 0; i < countries.size(); i++) {
+			JsonObject obj = countries.get(i).getAsJsonObject();
+			countryToCode.put(obj.get("Name").getAsString(), obj.get("Code").getAsString());
+		}
+		return countryToCode.get(country);
 		
 	}
 	
@@ -143,8 +161,9 @@ public class FlightAPICaller {
 	 * @return city code
 	 * @throws UnirestException
 	 * @throws NullPointerException
+	 * @throws IOException 
 	 */
-	public String getCityCode(String cityName, String countryName) throws UnirestException, NullPointerException {
+	public String getCityCode(String cityName, String countryName) throws UnirestException, NullPointerException, IOException {
 		
 		String cityCode = "";
 		String countryCode = getCountryCode(countryName);
@@ -163,7 +182,6 @@ public class FlightAPICaller {
 				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
 				.header("x-rapidapi-key", x_rapidapi_key)
 				.asJson();
-		
 		JsonParser jp = new JsonParser();
 		JsonElement je = jp.parse(response.getBody().toString());
 		JsonObject obj = je.getAsJsonObject();
@@ -245,8 +263,6 @@ public class FlightAPICaller {
 	 */
 	private String getSessionKey() throws UnirestException {
 		
-		List<String> sessionKeyList;
-		String[] sessionKeyArr;
 		String sessionKey;
 		String x_rapidapi_key = "";
 		
@@ -260,23 +276,34 @@ public class FlightAPICaller {
 				+ "country=US&currency=USD&locale=en-US&originPlace=" + originPlace
 				+ "&destinationPlace=" + destination + "&outboundDate=" + outboundDate + "&adults=1";
 		// send a request
-		HttpResponse<JsonNode> response = Unirest.post(host)
-				.header("x-rapidapi-host", x_rapidapi_host)
-				.header("x-rapidapi-key", x_rapidapi_key)
-				.header("content-type", content_type)
-				.body(body)
-				.asJson();
-		// get session key
-		sessionKeyList = response.getHeaders().get("Location");
-		
-		sessionKeyArr = sessionKeyList.get(0).split("/");
-		
-		sessionKey = sessionKeyArr[7];
-		
+		HashMap<String, String> headers = new HashMap<>();
+		headers.put("x-rapidapi-host", x_rapidapi_host);
+		headers.put("x-rapidapi-key", x_rapidapi_key);
+		headers.put("content-type", content_type);
+		sessionKey = networkCaller.sessionKeyHelper(host, body, headers);
 		return sessionKey;
 
 	}
 	
+	public JsonObject getApiBody() {
+		return apiBody;
+	}
+	
+	public String getInboundLegID() {
+		return inboundLegID;
+	}
+
+	public String getOutboundLegID() {
+		return outboundLegID;
+	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public String getBookingURL() {
+		return bookingURL;
+	}
 
 }
 
